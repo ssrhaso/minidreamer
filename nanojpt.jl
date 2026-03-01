@@ -95,5 +95,5 @@ function infer(n)
     end
     names
 end
-println("\n--- inference (new, hallucinated names) ---")
+println("\n INFERENCE (new, hallucinated words): ")
 for (i, nm) in enumerate(infer(20)); println("sample $(lpad(i,2)): $nm"); end
