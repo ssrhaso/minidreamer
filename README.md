@@ -1,6 +1,6 @@
 # minidreamer
 
-The most atomic way to train and run inference for a World Model in pure, dependency-free Julia.
+A first-principles approach to train and run inference for a World Model in pure, dependency-free Julia.
 A single ~150-line file containing the complete algorithm of cutting edge World Models distilled down to fundamental principles: encoder -> cross-attention state -> decoder.
 
 Everything else is just efficiency.
