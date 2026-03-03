@@ -12,7 +12,7 @@ using Random, Downloads; Random.seed!(8)
 # ACT I : The Data & Parameters 
 #   SCENE 1 : The English Words Dataset
 const INPUT = "input.txt"                                                   # Define local file path
-isfile(INPUT) || Downloads.download("https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt", INPUT)
+isfile(INPUT) || Downloads.download("https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt", INPUT)       # If no file, download
 docs = filter(!isempty, strip.(readlines(INPUT))); shuffle!(docs);          # Read file, strip whitespace, and randomize
 println("num docs: $(length(docs))")                                        # Announce the size of our training corpus
 const chars = sort(collect(Set(join(docs))))                                # Extract all unique characters to build our alphabet
@@ -22,13 +22,13 @@ encode(s) = [findfirst(==(c), chars) for c in s]                            # Th
 
 # SCENE 2 : The Initialization of Parameters
 const n_layer, n_embd, block_size, n_head = 4, 64, 16, 8                    # Hyperparameters: depth, width, context size, attention heads
-const hd = n_embd ÷ n_head; init(r, c) = 0.08randn(r, c)                    # Derived dimension per head, and Gaussian initialization
+const hd = n_embd ÷ n_head; init(r, c) = 0.08randn(r, c)                    # Derived dimension per head, and Gaussian WEIGHT initialization, σ = 0.08
 const W = Dict{String,Matrix{Float64}}(                                     # Allocate the global dictionary of weight matrices
-    "wte"=>init(n_embd,vocab_size), "wpe"=>init(n_embd,block_size),         # Token and Positional embeddings
-    "lm_head"=>init(vocab_size,n_embd), "attn_wq"=>init(n_embd,n_embd),     # Final linear projection and Attention Queries
-    "attn_wk"=>init(n_embd,n_embd), "attn_wv"=>init(n_embd,n_embd),         # Attention Keys and Values
-    "attn_wo"=>init(n_embd,n_embd), "mlp_fc1"=>init(4n_embd,n_embd),        # Attention Output projection and 1st MLP layer
-    "mlp_fc2"=>init(n_embd,4n_embd))                                        # 2nd MLP layer
+    "wte"=>init(n_embd,vocab_size), "wpe"=>init(n_embd,block_size),         # Token and Positional embeddings (64x28 and 64x16)
+    "lm_head"=>init(vocab_size,n_embd), "attn_wq"=>init(n_embd,n_embd),     # Final linear projection and Attention Queries (28x64 and 64x64)
+    "attn_wk"=>init(n_embd,n_embd), "attn_wv"=>init(n_embd,n_embd),         # Attention Keys and Values (64x64 and 64x64)
+    "attn_wo"=>init(n_embd,n_embd), "mlp_fc1"=>init(4n_embd,n_embd),        # Attention Output projection and 1st MLP layer (64x64 and 256x64)
+    "mlp_fc2"=>init(n_embd,4n_embd))                                        # 2nd MLP layer (64x256)
 println("num params: $(sum(length, values(W)))")                            # Announce the total mathematical complexity
 
 # ACT II : The Forward Pass 
