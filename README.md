@@ -45,7 +45,7 @@ Independent benchmarks by [@Entrpi](https://github.com/Entrpi) on an Apple M5 (s
 
 microjpt is the fastest batch=1 implementation with **3.8× faster than rust-microgpt at d16** and **5.5× faster at d64**. The explicit backprop collapses ~57K autograd tape nodes into ~20 matrix operations, the same insight driving EEmicroGPT's performance. The remaining gap to EEmicroGPT comes from batching (16 samples), f32 vs f64, and hand-optimized Neon/SME2 SIMD.
 
-> 100 lines of dependency-free Julia, 1,581× faster than CPython, and only 7.6× off hand-tuned C with SIMD intrinsics.
+> 100 lines of dependency-free Julia, 1,581× faster than CPython, and only 7.6× off hand-tuned C.
 
 ### Blog
 
